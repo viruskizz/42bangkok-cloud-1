@@ -1,77 +1,31 @@
-version: "3.3"
+version: '3.1'
+
 services:
-  nginx:
-    container_name: nginx
-    image: nginx
-    build:
-      context: ./requirements/nginx
-    restart: always
-    depends_on:
-      - wordpress
-    ports:
-      - "443:443"
-    volumes:
-      - wordpress_files:/var/www/html
-    networks:
-      - wordpress_network
 
   wordpress:
     image: wordpress
-    container_name: wordpress
-    build:
-      context: ./requirements/wordpress
     restart: always
-    depends_on:
-      - mariadb
-    volumes:
-      - wordpress_files:/var/www/html
-    networks:
-      - mariadb_network
-      - wordpress_network
+    ports:
+      - 8080:80
     environment:
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      WP_ADMIN: ${WP_ADMIN}
-      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
-      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
-      WP_USER: ${WP_USER}
-      WP_USER_PASSWORD: ${WP_USER_PASSWORD}
-      WP_USER_EMAIL: ${WP_USER_EMAIL}
-      WP_ADDRESS: ${WP_ADDRESS}
-      WP_TITLE: ${WP_TITLE}
+      - WORDPRESS_DB_HOST
+      - WORDPRESS_DB_USER
+      - WORDPRESS_DB_PASSWORD
+      - WORDPRESS_DB_NAME
+    volumes:
+      - wordpress:/var/www/html
 
-  mariadb:
-    image: mariadb
-    container_name: mariadb
-    build:
-      context: ./requirements/mariadb
+  db:
+    image: mysql:8.0
     restart: always
-    volumes:
-      - wordpress_db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    networks:
-      - mariadb_network
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_RANDOM_ROOT_PASSWORD
+    volumes:
+      - db:/var/lib/mysql
 
 volumes:
-  wordpress_files:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/wordpress
-      o: bind
-  wordpress_db:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/${USER}/data/mariadb
-      o: bind
-
-networks:
-  wordpress_network:
-  mariadb_network:
+  wordpress:
+  db:
