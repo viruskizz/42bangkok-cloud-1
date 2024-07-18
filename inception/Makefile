@@ -1,10 +1,10 @@
 all: up
 
 up: create_mount_dir
-	cd srcs && docker-compose up -d
+	cd srcs && docker compose up -d
 
 debug: create_mount_dir
-	cd srcs && docker-compose up
+	cd srcs && docker compose up
 
 down:
 	docker-compose -f srcs/docker-compose.yml down
@@ -24,7 +24,7 @@ fclean: clean
 	sudo rm -rf $(HOME)/data/mariadb;
 
 build: create_mount_dir
-	cd srcs && docker-compose build --no-cache
+	cd srcs && docker compose build --no-cache
 
 console:
 	docker exec -it $1 sh
