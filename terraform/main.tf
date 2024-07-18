@@ -18,7 +18,8 @@ resource "aws_instance" "this" {
   security_groups = [ aws_security_group.this.name ]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
-  user_data = "${file("cloud-init.sh")}"
+  user_data = templatefile("cloud-init.sh.tpl", {})
+  user_data_replace_on_change = true
   tags = {
     Name    = "${var.service}-${count.index}"
     Service = "cloud1"

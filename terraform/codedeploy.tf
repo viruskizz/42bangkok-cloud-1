@@ -30,7 +30,7 @@ resource "aws_codedeploy_app" "this" {
 
 resource "aws_codedeploy_deployment_group" "this" {
   app_name              = aws_codedeploy_app.this.name
-  deployment_group_name = "cloud1-group"
+  deployment_group_name = "${var.service}-group"
   service_role_arn      = aws_iam_role.codedeploy_role.arn
 
   ec2_tag_set {

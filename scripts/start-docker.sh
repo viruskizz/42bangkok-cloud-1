@@ -1,2 +1,3 @@
 #!/bin/bash
-make
+cd src
+docker compose up
