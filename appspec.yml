@@ -6,7 +6,7 @@ files:
     destination: /usr/src/app
 hooks:
   BeforeInstall:
-    - location: scripts/install_docker.sh
+    - location: scripts/install-docker.sh
       runas: root
   # Install:
   ApplicationStart:
