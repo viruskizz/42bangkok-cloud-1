@@ -1,0 +1,14 @@
+verion: 0.1
+os: linux
+
+files:
+  - source: docker
+    destination: /usr/src/app
+hooks:
+  BeforeInstall:
+    - location: scripts/install_docker.sh
+      runas: root
+  # Install:
+  ApplicationStart:
+    - location: scripts/start-docker.sh
+      runas: root

@@ -4,41 +4,8 @@ resource "tls_private_key" "this" {
 }
 
 resource "aws_key_pair" "this" {
-  key_name = "my-keypair"
+  key_name = "${var.project}-${var.service}-keypair"
   public_key = tls_private_key.this.public_key_openssh
-}
-
-resource "aws_security_group" "this" {
-  vpc_id = data.aws_vpc.default.id
-  name = "${var.service}-sg"
-
-  ingress {
-    protocol  = "tcp"
-    from_port = 80
-    to_port   = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol  = "tcp"
-    from_port = 443
-    to_port   = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol  = "tcp"
-    from_port = 22
-    to_port   = 22
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 resource "aws_instance" "this" {
@@ -49,6 +16,7 @@ resource "aws_instance" "this" {
   instance_type = "t2.micro"
   key_name      = aws_key_pair.this.key_name
   security_groups = [ aws_security_group.this.name ]
+  iam_instance_profile = ""
 
   user_data = "${file("cloud-init.sh")}"
   tags = {
@@ -59,52 +27,42 @@ resource "aws_instance" "this" {
   depends_on = [ aws_key_pair.this ]
 }
 
-resource "aws_route53_record" "this" {
-  # for_each = toset(aws_instance.this)
-  count = var.number
-
-  zone_id = data.aws_route53_zone.this.id
-  name    = "${var.service}-${count.index}.${var.domain_name}"
-  type    = "A"
-  ttl     = 60
-  records = [
-    aws_instance.this[count.index].public_ip
-  ]
-}
-
-data "aws_iam_policy_document" "ec2_assume_role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
+resource "aws_iam_instance_profile" "test_profile" {
+  name = "${var.project}-${var.service}-profile"
+  role = aws_iam_role.ec2_role.name
 }
 
 resource "aws_iam_role" "ec2_role" {
   name               = "${var.project}-${var.service}-ec2-role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-}
-
-data "aws_iam_policy_document" "policy" {
-  statement {
-    effect    = "Allow"
-    actions   = ["ec2:Describe*"]
-    resources = ["*"]
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+  inline_policy {
+    name = "CodeDeployEc2"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action   = [
+            "s3:Get*",
+            "s3:List*"
+          ]
+          Effect   = "Allow"
+          Resource = [
+            "arn:aws:s3:::aws-codedeploy-ap-southeast-1/*"
+          ]
+        },
+      ]
+    })
   }
-}
-
-resource "aws_iam_policy" "policy" {
-  name        = "test-policy"
-  description = "A test policy"
-  policy      = data.aws_iam_policy_document.policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "test-attach" {
-  role       = aws_iam_role.role.name
-  policy_arn = aws_iam_policy.policy.arn
 }
