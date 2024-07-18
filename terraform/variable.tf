@@ -4,16 +4,27 @@ variable "region" {
   default     = "ap-southeast-1"
 }
 
-variable "name" {
+variable "project" {
+  description = "Owner of this project"
+  type = string
+  default = "42Bangkok"
+}
+
+variable "service" {
   description = "Value of the Name tag for the EC2 instance"
   type        = string
-  default     = "cloud"
+  default     = "Cloud1"
 }
 
 variable "key-pair" {
   description = "Value of AWS SSH key-pair name"
   type        = string
-  default     = "my-keypair"
+  default     = "42Bangkok-keypair"
+}
+
+variable "domain_name" {
+  type = string
+  default = "42.goodgeek.club"
 }
 
 variable "number" {

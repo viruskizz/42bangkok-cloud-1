@@ -3,7 +3,7 @@ all:
 	terraform init
 	terraform plan
 	terraform apply -auto-approve
-	terraform output -raw public_keypair > output/keypair.pem
+	terraform output -raw public_keypair > output/my-keypair.pem
 	terraform output -json > output/output.json
 	terraform output -json instance_ips > output/instance_ips.json
 
