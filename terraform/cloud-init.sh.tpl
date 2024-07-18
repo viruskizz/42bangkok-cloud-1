@@ -28,6 +28,10 @@ sudo apt-get update -y
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+service docker start
+usermod -a -G docker ubuntu
+chkconfig docker on
+
 
 ## Setup ENV
 PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
@@ -35,17 +39,13 @@ PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 mkdir -p /usr/src/app
 
 cat <<EOF > /home/ubuntu/.env
-MYSQL_HOST=mariadb
-MYSQL_DATABASE=wordpress
-MYSQL_USER=admin
-MYSQL_PASSWORD=admin
-MYSQL_ROOT_PASSWORD=admin
-WP_ADMIN=admin
-WP_ADMIN_PASSWORD=admin
-WP_ADMIN_EMAIL=admin@gmail.com
-WP_USER=user
-WP_USER_PASSWORD=user
-WP_USER_EMAIL=user@gmail.com
-WP_ADDRESS=localhost
-WP_TITLE=wordpress
+WORDPRESS_DB_HOST=db
+WORDPRESS_DB_USER=exampleuser
+WORDPRESS_DB_PASSWORD=examplepass
+WORDPRESS_DB_NAME=exampledb
+
+MYSQL_DATABASE=exampledb
+MYSQL_USER=exampleuser
+MYSQL_PASSWORD=examplepass
+MYSQL_RANDOM_ROOT_PASSWORD="1"
 EOF
