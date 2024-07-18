@@ -16,7 +16,7 @@ resource "aws_instance" "this" {
   instance_type = "t2.micro"
   key_name      = aws_key_pair.this.key_name
   security_groups = [ aws_security_group.this.name ]
-  iam_instance_profile = ""
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   user_data = "${file("cloud-init.sh")}"
   tags = {
@@ -27,7 +27,7 @@ resource "aws_instance" "this" {
   depends_on = [ aws_key_pair.this ]
 }
 
-resource "aws_iam_instance_profile" "test_profile" {
+resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.project}-${var.service}-profile"
   role = aws_iam_role.ec2_role.name
 }
@@ -58,9 +58,7 @@ resource "aws_iam_role" "ec2_role" {
             "s3:List*"
           ]
           Effect   = "Allow"
-          Resource = [
-            "arn:aws:s3:::aws-codedeploy-ap-southeast-1/*"
-          ]
+          Resource = "*"
         },
       ]
     })
