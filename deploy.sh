@@ -1,5 +1,5 @@
 #!/bin/bash
-COMMIT_ID=e3145bb7966b191443656a5f5a21bc8eca8ee968
+COMMIT_ID=e2a9ce21a1fcfa29e01f0a68b8cd873ea965253d
 REPOSITORY=viruskizz/42bangkok-cloud-1
 
 DEPLOYMENT=$(aws deploy create-deployment \
@@ -8,4 +8,4 @@ DEPLOYMENT=$(aws deploy create-deployment \
   --github-location repository=$REPOSITORY,commitId=$COMMIT_ID \
   --region ap-southeast-1)
 
-echo "DeploymentID:" $(echo "$DEPLOYMENT" | jq '.deploymentId')
+export DEPLOYMENT_ID=$(echo "$DEPLOYMENT" | jq -r '.deploymentId')

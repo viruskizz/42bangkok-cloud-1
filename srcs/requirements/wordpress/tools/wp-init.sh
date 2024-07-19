@@ -31,8 +31,9 @@ if [ ! -f wp-config.php ]; then
     --user_pass="$WP_USER_PASSWORD" \
     --allow-root
 
-  wp option update siteurl "$WP_SITE" --allow-root
+  wp option update siteurl "https://$WP_SITE" --allow-root
   wp option update home "https://$WP_SITE" --allow-root
+  wp search-replace https://example.com https://$WP_SITE --allow-root
 fi
 
 echo $YELLOW"Wordpress Started"$RESET
