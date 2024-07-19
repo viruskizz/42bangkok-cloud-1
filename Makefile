@@ -9,7 +9,3 @@ deploy:
 
 destroy:
 	make -C terraform destroy
-
-init:
-	cp .env srcs
-	cd srcs && docker compose up -d 

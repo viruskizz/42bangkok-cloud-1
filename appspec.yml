@@ -7,10 +7,7 @@ files:
 hooks:
   BeforeInstall:
     - location: scripts/down-docker.sh
-      runas: root
   AfterInstall:
-    - location: scripts/down-docker.sh
-  # Install:
+    - location: scripts/prepare-env.sh
   ApplicationStart:
     - location: scripts/start-docker.sh
-      runas: root

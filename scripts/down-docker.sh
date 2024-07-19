@@ -1,6 +1,6 @@
 #!/bin/bash
-FILE="docker-compose.yml"
+FILE="/home/ubuntu/app/docker-compose.yml"
 
 if [ -f "$FILE" ]; then
-  docker compose down
+  docker compose -f $FILE down
 fi
