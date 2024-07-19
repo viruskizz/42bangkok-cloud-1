@@ -6,8 +6,10 @@ files:
     destination: /home/ubuntu/app
 hooks:
   BeforeInstall:
-    - location: scripts/install-docker.sh
+    - location: scripts/down-docker.sh
       runas: root
+  AfterInstall:
+    
   # Install:
   ApplicationStart:
     - location: scripts/start-docker.sh

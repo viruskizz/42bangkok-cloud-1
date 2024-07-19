@@ -1,3 +1,3 @@
 #!/bin/bash
 cd srcs
-docker compose up -d
+docker compose up -d --build

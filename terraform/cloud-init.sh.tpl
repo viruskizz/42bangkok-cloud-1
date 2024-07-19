@@ -39,15 +39,24 @@ git clone https://github.com/viruskizz/42bangkok-cloud-1/ ${app_dir}
 ## Setup ENV
 
 cat <<EOF > ${app_dir}.env
-WORDPRESS_DB_HOST=db
-WORDPRESS_DB_USER=exampleuser
-WORDPRESS_DB_PASSWORD=${db_password}
-WORDPRESS_DB_NAME=exampledb
-
-MYSQL_DATABASE=exampledb
-MYSQL_USER=exampleuser
+#Mariadb
+MYSQL_ROOT_PASSWORD=${db_password}
+MYSQL_USER=admin
 MYSQL_PASSWORD=${db_password}
-MYSQL_RANDOM_ROOT_PASSWORD="1"
+
+#Wordpress
+WP_SCHEME=http
+WP_PORT=80
+DB_HOST=db
+DB_NAME=wordpress
+WP_TITLE=wordpress
+WP_ADMIN=admin
+WP_ADMIN_PASSWORD=${db_password}
+WP_ADMIN_EMAIL=admin@example.com
+WP_USER=araiva
+WP_USER_EMAIL=araiva@example.com
+WP_USER_PASSWORD=${db_password}
+DOMAIN_NAME=localhost
 EOF
 
 make init
