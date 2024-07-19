@@ -8,4 +8,4 @@ DEPLOYMENT=$(aws deploy create-deployment \
   --github-location repository=$REPOSITORY,commitId=$COMMIT_ID \
   --region ap-southeast-1)
 
-echo "DeploymentID: " $(jq '.deploymentId' "$DEPLOYMENT")
+echo "DeploymentID:" $(echo "$DEPLOYMENT" | jq '.deploymentId')

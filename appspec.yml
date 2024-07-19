@@ -2,14 +2,14 @@ version: 0.0
 os: linux
 
 files:
-  - source: docker
+  - source: srcs
     destination: /home/ubuntu/app
 hooks:
   BeforeInstall:
     - location: scripts/down-docker.sh
       runas: root
   AfterInstall:
-    
+    - location: scripts/down-docker.sh
   # Install:
   ApplicationStart:
     - location: scripts/start-docker.sh

@@ -1,2 +1,2 @@
 #!/bin/bash
-cp /home/ubuntu/.env /home/ubuntu/app/src
+cp /home/ubuntu/.env .
