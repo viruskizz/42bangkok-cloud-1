@@ -1,3 +1,3 @@
 #!/bin/bash
-cd down-docker.sh
+cd srcs
 docker compose down
