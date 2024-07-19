@@ -38,7 +38,7 @@ git clone https://github.com/viruskizz/42bangkok-cloud-1/ ${app_dir}
 
 ## Setup ENV
 
-cat <<EOF > ${app_dir}.env
+cat <<EOF > /home/ubuntu/.env
 #Mariadb
 MYSQL_ROOT_PASSWORD=${db_password}
 MYSQL_USER=admin
