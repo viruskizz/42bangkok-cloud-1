@@ -1,4 +1,11 @@
-all:
+all: deploy
+
+plan: 
+	mkdir -p output
+	terraform init
+	terraform plan
+
+deploy: 
 	mkdir -p output
 	terraform init
 	terraform plan

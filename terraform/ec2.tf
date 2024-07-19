@@ -17,7 +17,10 @@ resource "aws_instance" "this" {
   security_groups = [ aws_security_group.ec2_sg.name ]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
-  user_data = templatefile("cloud-init.sh.tpl", {})
+  user_data = templatefile("cloud-init.sh.tpl", {
+    app_dir = "/home/ubuntu/app/"
+    db_password = var.db_password
+  })
   user_data_replace_on_change = true
   tags = {
     Name    = "${var.service}-${each.key}"

@@ -34,19 +34,20 @@ chkconfig docker on
 
 
 ## Clone Project
-git clone https://github.com/viruskizz/42bangkok-cloud-1/ /home/ubuntu/app
+git clone https://github.com/viruskizz/42bangkok-cloud-1/ ${app_dir}
 
 ## Setup ENV
-PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 
-cat <<EOF > /home/ubuntu/.env
+cat <<EOF > ${app_dir}.env
 WORDPRESS_DB_HOST=db
 WORDPRESS_DB_USER=exampleuser
-WORDPRESS_DB_PASSWORD=examplepass
+WORDPRESS_DB_PASSWORD=${db_password}
 WORDPRESS_DB_NAME=exampledb
 
 MYSQL_DATABASE=exampledb
 MYSQL_USER=exampleuser
-MYSQL_PASSWORD=examplepass
+MYSQL_PASSWORD=${db_password}
 MYSQL_RANDOM_ROOT_PASSWORD="1"
 EOF
+
+make init

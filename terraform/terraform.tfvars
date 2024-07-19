@@ -2,3 +2,4 @@
 app_names = [
   "main"
 ]
+db_password = "admin"

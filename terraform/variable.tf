@@ -47,3 +47,7 @@ variable "app_names" {
     "main"
   ]
 }
+
+variable "db_password" {
+  type = string
+}
