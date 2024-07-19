@@ -12,4 +12,4 @@ destroy:
 
 init:
 	cp .env srcs
-	cd srcs && docker composer up -d 
+	cd srcs && docker compose up -d 

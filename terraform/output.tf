@@ -1,7 +1,3 @@
-output "instances" {
-  value = aws_instance.this
-}
-
 output "public_keypair" {
   description = "Public key of oe-key-pair"
   value       = tls_private_key.this.public_key_openssh
@@ -20,4 +16,8 @@ output "codedeploy_app_name" {
 
 output "codedeploy_group_name" {
   value = aws_codedeploy_deployment_group.this.deployment_group_name
+}
+
+output "dns_names" {
+  value = values(aws_route53_record.this).*.name
 }

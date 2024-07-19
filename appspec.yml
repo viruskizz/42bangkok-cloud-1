@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: docker
-    destination: /usr/src/app
+    destination: /home/ubuntu/app
 hooks:
   BeforeInstall:
     - location: scripts/install-docker.sh

@@ -48,3 +48,21 @@ resource "aws_lb_listener" "frontend_https" {
     target_group_arn = aws_lb_target_group.this[var.app_names[0]].arn
   }
 }
+
+resource "aws_lb_listener_rule" "apps" {
+  for_each = toset(var.app_names)
+
+  listener_arn = aws_lb_listener.frontend_https.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = ["${var.service}-${each.key}-${var.domain_name}"]
+    }
+  }
+}

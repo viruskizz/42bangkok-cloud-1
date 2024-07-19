@@ -1,3 +1,3 @@
 #!/bin/bash
-cd src
-docker compose up
+cd srcs
+docker compose up -d

@@ -12,9 +12,8 @@ deploy:
 	terraform apply -auto-approve
 	terraform output -raw public_keypair > output/my-keypair.pem
 	terraform output -json > output/output.json
-	terraform output -json instance_ips > output/instance_ips.json
 
-clean:
+destroy:
 	terraform destroy -auto-approve
 	rm -rf output
 
