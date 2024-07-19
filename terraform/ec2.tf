@@ -12,7 +12,7 @@ resource "aws_instance" "this" {
   for_each = toset(var.app_names)
 
   ami           = "ami-060e277c0d4cce553" # Ubuntu
-  instance_type = "t2.micro"
+  instance_type = "t3.medium"
   key_name      = aws_key_pair.this.key_name
   security_groups = [ aws_security_group.ec2_sg.name ]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
