@@ -33,10 +33,11 @@ usermod -a -G docker ubuntu
 chkconfig docker on
 
 
+## Clone Project
+git clone https://github.com/viruskizz/42bangkok-cloud-1/ /home/ubuntu/app
+
 ## Setup ENV
 PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
-
-mkdir -p /usr/src/app
 
 cat <<EOF > /home/ubuntu/.env
 WORDPRESS_DB_HOST=db

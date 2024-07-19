@@ -31,3 +31,19 @@ variable "number" {
   default = 1
   type = number
 }
+
+variable "subnet_ids" {
+  type = list(string)
+  default = [
+    "subnet-b6a825ef",
+    "subnet-3905d35f",
+    "subnet-3fca0c77",
+  ]
+}
+
+variable "app_names" {
+  type = list(string)
+  default = [
+    "main"
+  ]
+}

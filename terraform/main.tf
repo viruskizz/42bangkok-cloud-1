@@ -9,19 +9,18 @@ resource "aws_key_pair" "this" {
 }
 
 resource "aws_instance" "this" {
-  count         = var.number
+  for_each = toset(var.app_names)
 
-  # ami           = "ami-0c185732ad1b6169b" # Debian
   ami           = "ami-060e277c0d4cce553" # Ubuntu
   instance_type = "t2.micro"
   key_name      = aws_key_pair.this.key_name
-  security_groups = [ aws_security_group.this.name ]
+  security_groups = [ aws_security_group.ec2_sg.name ]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   user_data = templatefile("cloud-init.sh.tpl", {})
   user_data_replace_on_change = true
   tags = {
-    Name    = "${var.service}-${count.index}"
+    Name    = "${var.service}-${each.key}"
     Service = "cloud1"
   }
 
