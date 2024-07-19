@@ -20,6 +20,7 @@ resource "aws_instance" "this" {
   user_data = templatefile("cloud-init.sh.tpl", {
     app_dir = "/home/ubuntu/app/"
     db_password = var.db_password
+    wp_site = "${var.service}-${each.key}.${var.domain_name}"
   })
   user_data_replace_on_change = true
   tags = {

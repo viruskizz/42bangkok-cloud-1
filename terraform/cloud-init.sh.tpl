@@ -52,6 +52,7 @@ WP_ADMIN_EMAIL=admin@example.com
 WP_USER=araiva
 WP_USER_EMAIL=araiva@example.com
 WP_USER_PASSWORD=${db_password}
+WP_SITE=${wp_site}
 DOMAIN_NAME=localhost
 EOF
 
