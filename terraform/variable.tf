@@ -44,7 +44,8 @@ variable "subnet_ids" {
 variable "app_names" {
   type = list(string)
   default = [
-    "main"
+    "one",
+    "two"
   ]
 }
 

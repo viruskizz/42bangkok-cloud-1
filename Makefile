@@ -1,10 +1,13 @@
 
-all: deploy
+all: apply deploy
+
+deploy:
+	./deploy.sh
 
 plan:
 	make -C terraform plan
 
-deploy:
+apply:
 	make -C terraform deploy
 
 destroy:

@@ -32,10 +32,6 @@ service docker start
 usermod -a -G docker ubuntu
 chkconfig docker on
 
-
-## Clone Project
-git clone https://github.com/viruskizz/42bangkok-cloud-1/ ${app_dir}
-
 ## Setup ENV
 
 cat <<EOF > /home/ubuntu/.env
