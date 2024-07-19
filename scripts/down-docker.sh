@@ -1,3 +1,3 @@
 #!/bin/bash
-cd srcs
+cd /home/ubuntu/app/srcs
 docker compose down
