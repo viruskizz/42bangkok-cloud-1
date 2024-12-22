@@ -1,58 +1,54 @@
-FROM debian:buster-slim
+FROM	debian:bullseye
 
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-    bash \
-    locales \
-    curl \
-    less \
-    wget \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ARG		MYSQL_NAME
+ARG		MYSQL_USERNAME_ADMIN
+ARG		MYSQL_PASSWORD_ADMIN
+ARG		MYSQL_HOST
+ARG		WEB_TITLE
+ARG		WEB_EMAIL
+ARG		DOMAIN_NAME
 
-ENV LANG en_US.utf8
+WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-    mariadb-client \
-    redis-tools
+RUN 	apt update && apt upgrade -y
+RUN		apt -y install curl \
+		vim telnet \
+		mariadb-client \
+		redis-server \
+		php \
+		php-common \
+		php-cli \
+		php-fpm \
+		php-json \
+		php-pdo \
+		php-mysql \
+		php-zip \
+		php-gd \
+		php-mbstring \
+		php-curl \
+		php-xml \
+		php-pear \
+		php-bcmath \
+		php-cgi \
+		php-mysqli \
+		php-phpseclib \
+		php-mysql;
 
-RUN apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-    php \
-    php-fpm \
-    php-cli \
-    php-json \
-    php-common \
-    php-mysql \
-    php-zip \
-    php-gd \
-    php-mbstring \
-    php-curl \
-    php-xml \
-    php-bcmath
+RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
+RUN 	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp-cli;
+RUN		mkdir -p /var/run/php;
 
-COPY conf/php-fpm.conf  /etc/php/7.3/fpm/php-fpm.conf
-COPY conf/www.conf      /etc/php/7.3/fpm/pool.d/www.conf
-COPY conf/my.cnf        /etc/my.cnf
-COPY ./tools            /root/tools/
+# COPY	conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY	conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY	tools/wordpress_script.sh .
+RUN 	chmod 777 wordpress_script.sh;
 
-RUN chmod +x /root/tools/*.sh
+WORKDIR /var/www/wordpress
 
-RUN ls -l /root/tools
+RUN 	chown -R www-data:www-data /var/www/wordpress
+RUN		wp-cli core download --allow-root;
 
-RUN bash /root/tools/wp-setup.sh
+EXPOSE	9000
 
-RUN  mkdir -p /var/www/html/wordpress/42bangkok
-COPY ./conf/index.html  /var/www/html/wordpress/42bangkok
-
-STOPSIGNAL SIGQUIT
-
-EXPOSE 9000
-
-WORKDIR /var/www/html/wordpress
-
-ENTRYPOINT  bash /root/tools/docker-entrypoint.sh && \
-            /usr/sbin/php-fpm7.3 -F -R
+# ENTRYPOINT	bash /app/wordpress_script.sh && php-fpm7.3 -F -R
+ENTRYPOINT	bash /app/wordpress_script.sh && php-fpm7.4 -F -R

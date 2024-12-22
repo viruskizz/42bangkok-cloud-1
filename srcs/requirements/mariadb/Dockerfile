@@ -1,28 +1,18 @@
-FROM debian:buster-slim
+FROM	debian:bullseye
 
-ARG MYSQL_ROOT_PASSWORD
-ARG MYSQL_USER
-ARG MYSQL_PASSWORD
+ARG		MYSQL_NAME
+ARG		MYSQL_ROOTPASS
+ARG		MYSQL_USERNAME_ADMIN
+ARG		MYSQL_PASSWORD_ADMIN
+ARG		MYSQL_USERNAME
+ARG		MYSQL_PASSWORD
 
-RUN apt-get update \
-    && apt-get install -y \
-    locales \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+WORKDIR	/app
 
-ENV LANG en_US.utf8
+COPY	./tools/mariadb_script.sh .
 
-RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
-    mariadb-server \
-    mariadb-client
+RUN		chmod 777 mariadb_script.sh;
+RUN		bash mariadb_script.sh && rm mariadb_script.sh
+EXPOSE	3306
 
-COPY ./tools/ /root/tools/
-RUN chmod +x /root/tools/*.sh
-# RUN /root/tools/dbsetup.sh
-
-EXPOSE 3306
-
-WORKDIR /root
-
-ENTRYPOINT ["mysqld"]
-
+ENTRYPOINT	[ "mysqld" ]

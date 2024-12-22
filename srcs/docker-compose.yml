@@ -1,75 +1,106 @@
-version: "3.9"
-
 services:
-  db:
-    image: mysql:5.6
-    restart: always
-    environment:
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
-    ports:
-      - 3360:3306
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - wordpress
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
-
-  wordpress:
-    container_name: wordpress
+  mariadb:
+    container_name: 'mariadb'
     build:
-      context: ./requirements/wordpress
-    environment:
-      - DB_HOST
-      - DB_NAME
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - WP_DOMAIN
-      - WP_SCHEME
-      - WP_PORT
-      - WP_TITLE
-      - WP_ADMIN
-      - WP_ADMIN_PASSWORD
-      - WP_ADMIN_EMAIL
-      - WP_USER
-      - WP_USER_EMAIL
-      - WP_USER_PASSWORD
-    ports:
-      - 9000:9000
+      context: ./requirements/mariadb/
+      args:
+        MYSQL_NAME: ${MYSQL_NAME}
+        MYSQL_ROOTPASS: ${MYSQL_ROOTPASS}
+        MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+        MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+        MYSQL_USERNAME: ${MYSQL_USERNAME}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    image: 'mariadb'
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - database:/var/lib/mysql/
     networks:
-      - wordpress
-    depends_on:
-      db:
-        condition: service_healthy
+      - cloud1
     restart: always
-
+  wordpress:
+    container_name: 'wordpress'
+    build:
+      context: ./requirements/wordpress/
+      args:
+        MYSQL_NAME: ${MYSQL_NAME}
+        MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+        MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+        MYSQL_HOST: ${MYSQL_HOST}
+        WEB_TITLE: ${WEB_TITLE}
+        WEB_EMAIL: ${WEB_EMAIL}
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    image: 'wordpress'
+    environment:
+      MYSQL_NAME: ${MYSQL_NAME}
+      MYSQL_USERNAME_ADMIN: ${MYSQL_USERNAME_ADMIN}
+      MYSQL_PASSWORD_ADMIN: ${MYSQL_PASSWORD_ADMIN}
+      MYSQL_HOST: ${MYSQL_HOST}
+      WEB_TITLE: ${WEB_TITLE}
+      WEB_EMAIL: ${WEB_EMAIL}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    volumes:
+      - wordpress:/var/www/wordpress/
+    networks:
+      - cloud1
+    restart: always
+    depends_on:
+      - mariadb
   nginx:
-    container_name: nginx
+    container_name: 'nginx'
     build:
       context: ./requirements/nginx
-    ports:
-      - 443:443
-      - 80:80
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    image: 'nginx'
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - wordpress:/var/www/wordpress/
+      - phpmyadmin:/var/www/phpmyadmin/
     networks:
-      - wordpress
+      - cloud1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
     depends_on:
       - wordpress
+      - mariadb
+      - phpmyadmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    build:
+      context: ./requirements/phpmyadmin
+    image: 'phpmyadmin'
+    volumes:
+      - phpmyadmin:/var/www/phpmyadmin/
+    networks:
+      - cloud1
     restart: always
-
-networks:
-  wordpress:
+    depends_on:
+      - wordpress
 
 volumes:
+  database:
+    name: database
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      device: $HOME/cloud1_data/database/
   wordpress:
-  db:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      device: $HOME/cloud1_data/www/wordpress/
+  phpmyadmin:
+    name: phpmyadmin
+    driver: local
+    driver_opts:
+      type: none
+      o: "bind"
+      device: $HOME/cloud1_data/www/phpmyadmin/
 
-
+networks:
+  cloud1:
+    name: cloud1
+    driver: bridge
