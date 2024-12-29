@@ -22,6 +22,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		--admin_email=$WEB_EMAIL \
 		--allow-root;
 	wp-cli option update siteurl "https://$DOMAIN_NAME" --allow-root
-  	wp-cli option update home "https://$DOMAIN_NAME" --allow-root
+	wp-cli option update home "https://$DOMAIN_NAME" --allow-root
+	wp-cli search-replace http://$DOMAIN_NAME https://$DOMAIN_NAME --allow-root
 	wp-cli theme install twentytwentyfour --activate --allow-root
 fi
