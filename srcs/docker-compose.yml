@@ -77,28 +77,33 @@ services:
     depends_on:
       - wordpress
 
+# volumes:
+#   database:
+#     name: database
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: "bind"
+#       device: $HOME/cloud1_data/database/
+#   wordpress:
+#     name: wordpress
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: "bind"
+#       device: $HOME/cloud1_data/www/wordpress/
+#   phpmyadmin:
+#     name: phpmyadmin
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: "bind"
+#       device: $HOME/cloud1_data/www/phpmyadmin/
+
 volumes:
   database:
-    name: database
-    driver: local
-    driver_opts:
-      type: none
-      o: "bind"
-      device: $HOME/cloud1_data/database/
   wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: none
-      o: "bind"
-      device: $HOME/cloud1_data/www/wordpress/
   phpmyadmin:
-    name: phpmyadmin
-    driver: local
-    driver_opts:
-      type: none
-      o: "bind"
-      device: $HOME/cloud1_data/www/phpmyadmin/
 
 networks:
   cloud1:

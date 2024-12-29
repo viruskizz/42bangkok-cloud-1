@@ -35,25 +35,46 @@ chkconfig docker on
 ## Setup ENV
 
 cat <<EOF > /home/ubuntu/.env
-#Mariadb
-MYSQL_ROOT_PASSWORD=${db_password}
-MYSQL_USER=admin
-MYSQL_PASSWORD=${db_password}
+# #Mariadb
+# MYSQL_ROOT_PASSWORD=${db_password}
+# MYSQL_USER=admin
+# MYSQL_PASSWORD=${db_password}
 
-#Wordpress
-WP_SCHEME=http
-WP_PORT=80
-DB_HOST=db
-DB_NAME=wordpress
-WP_TITLE=wordpress
-WP_ADMIN=admin
-WP_ADMIN_PASSWORD=${db_password}
-WP_ADMIN_EMAIL=admin@example.com
-WP_USER=araiva
-WP_USER_EMAIL=araiva@example.com
-WP_USER_PASSWORD=${db_password}
-WP_SITE=${wp_site}
-DOMAIN_NAME=localhost
+# #Wordpress
+# WP_SCHEME=http
+# WP_PORT=80
+# DB_HOST=db
+# DB_NAME=wordpress
+# WP_TITLE=wordpress
+# WP_ADMIN=admin
+# WP_ADMIN_PASSWORD=${db_password}
+# WP_ADMIN_EMAIL=admin@example.com
+# WP_USER=araiva
+# WP_USER_EMAIL=araiva@example.com
+# WP_USER_PASSWORD=${db_password}
+# WP_SITE=${wp_site}
+# DOMAIN_NAME=localhost
+
+# * name of database container normaly be mariadb
+MYSQL_HOST=mariadb
+# * name of database for wordpress
+MYSQL_NAME=wordpress
+# * root password for mariadb
+MYSQL_ROOTPASS=admin
+# * admin account for mariadb, wordpress-admin
+MYSQL_USERNAME_ADMIN=admin
+MYSQL_PASSWORD_ADMIN=${db_password}
+# * user account for mariadb
+MYSQL_USERNAME=user
+MYSQL_PASSWORD=${db_password}
+# * domian name
+DOMAIN_NAME=${wp_site}
+# * title for wordpress
+WEB_TITLE=cloud1
+# * email for wordpress-admin
+WEB_EMAIL=araiva@example.com
+
+
 EOF
 
 make init

@@ -1,19 +1,20 @@
-FROM	debian:bullseye
+FROM debian:buster-slim
 
-ARG		DOMAIN_NAME
+RUN apt-get update \
+    && apt-get install -y \
+    locales \
+    && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
-WORKDIR /app
+ENV LANG en_US.utf8
 
-RUN		apt update && apt -y upgrade; \
-		apt -y install nginx openssl ufw \
-		vim telnet curl;
-RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-		-subj "/C=TH/ST=ChiangMai/O=MySharnvon, Inc./CN=$DOMAIN_NAME" \
-		-keyout /etc/ssl/private/nginx-selfsigned.key \
-		-out /etc/ssl/certs/nginx-selfsigned.crt;
-COPY	./conf/defualt.conf /etc/nginx/conf.d/
-RUN		sed -i "s/###server_name###/$DOMAIN_NAME/g" /etc/nginx/conf.d/defualt.conf
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+    nginx
 
-EXPOSE	80
-EXPOSE	443
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+COPY conf/default.conf      /etc/nginx/sites-available/default
+
+EXPOSE 80
+
+STOPSIGNAL SIGQUIT
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

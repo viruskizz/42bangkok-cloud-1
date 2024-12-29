@@ -1,25 +1,17 @@
 
 # Iac
 
-## Pupput
-Puppet tool need 2 node at least
-1. master node or server
-2. client node that need agent
+## Terraform
 
 ## Prequistis
 
-Master node
-```sh
-#!/bin/bash
-sudo apt-get update -y
-apt-get install puppetserver
-service puppetserver status
-```
+Terraform
+Follow instruction [terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-Client
+AWS CLI
 ```sh
 #!/bin/bash
-sudo apt-get update -y
-sudo apt-get install puppet-agent
-sudo apt-get install ec2-instance-connect
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 ```
