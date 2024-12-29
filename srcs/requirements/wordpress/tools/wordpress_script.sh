@@ -21,7 +21,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		--admin_password=$MYSQL_PASSWORD_ADMIN \
 		--admin_email=$WEB_EMAIL \
 		--allow-root;
-	wp option update siteurl "https://$DOMAIN_NAME" --allow-root
-  	wp option update home "https://$DOMAIN_NAME" --allow-root
+	wp-cli option update siteurl "https://$DOMAIN_NAME" --allow-root
+  	wp-cli option update home "https://$DOMAIN_NAME" --allow-root
 	wp-cli theme install twentytwentyfour --activate --allow-root
 fi

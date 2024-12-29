@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: srcs
+  - source: srcs_backup
     destination: /home/ubuntu/app
 hooks:
   BeforeInstall:
