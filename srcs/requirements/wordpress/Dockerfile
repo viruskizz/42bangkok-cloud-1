@@ -35,8 +35,7 @@ RUN		apt -y install curl \
 		php-mysql;
 
 RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
-RUN 	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp-cli;
-RUN		mv wp-cli.phar /usr/local/bin/wp
+RUN 	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp;
 RUN		mkdir -p /var/run/php;
 
 # COPY	conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
