@@ -1,5 +1,5 @@
 #!/bin/bash
-COMMIT_ID=dea4b36613defdcf909a6dc5123b801b7102e6e1
+COMMIT_ID=8d3d8867c2d38354057278302f33578316841448
 REPOSITORY=viruskizz/42bangkok-cloud-1
 
 DEPLOYMENT=$(aws deploy create-deployment \
