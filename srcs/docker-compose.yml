@@ -39,6 +39,7 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
     volumes:
       - wordpress:/var/www/wordpress/
+      - phpmyadmin:/var/www/phpmyadmin/
     networks:
       - cloud1
     restart: always
