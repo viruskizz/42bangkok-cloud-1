@@ -46,7 +46,7 @@ RUN 	chmod 777 wordpress_script.sh;
 WORKDIR /var/www/wordpress
 
 RUN 	chown -R www-data:www-data /var/www/wordpress
-RUN		wp-cli core download --allow-root;
+RUN		wp core download --allow-root;
 
 EXPOSE	9000
 
